@@ -37,7 +37,7 @@ export default () => {
       return () => {
         skipGetResponseAfterDestroy = true;
       }
-  }, [isLoading]);
+  }, [isLoading, typeUrl]);
 
   return [{isLoading, response, error}, doFetch]
 }
