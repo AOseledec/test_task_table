@@ -11,17 +11,12 @@ const App = () => {
   const [{response, isLoading, error}, doFetch] = useFetch();
   const [isSmal, setIsSmal] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [partData, setPartData] = useState()
-
+  const [partData, setPartData] = useState();
+  const [isOpendAddForm, setIsOpendAddForm] = useState(false)
   const limit = 10;
   const total = isSmal ? 32 : 1000;
 
-  const handleClick = bool => {
-    setIsSmal(bool);
-  }
-  const handleCurrentPage = page => {
-    setCurrentPage(page)
-  }
+  // const handleCurrentPage = page => setCurrentPage(page);
 
   useEffect(() => {
     doFetch(isSmal)
@@ -40,21 +35,53 @@ const App = () => {
             <div className="btn-group">
               <button
                 className="btn btn-primary"
-                onClick={e =>handleClick(true)}
+                onClick={e =>setIsSmal(true)}
               >Less data</button>
               <button
                 className="btn btn-warning"
-                onClick={e => handleClick(false)}
+                onClick={e => setIsSmal(false)}
               >More data</button>
             </div>
-            <button className="btn btn-success pull-xs-right">Add row</button>
+            <button
+              className="btn btn-success pull-xs-right"
+              onClick={e => setIsOpendAddForm(true)}  
+            >Add row</button>
           </div>
         </div>
       </div>
+      {isOpendAddForm && (
+        <>
+          <hr/>
+          <form className='form'>
+            <fieldset>
+              <fieldset className='form-group'>
+                <input type="text" placeholder='' valeu={''} onChange={''}/>
+              </fieldset>
+              <fieldset className='form-group'>
+                <input type="text" placeholder='' valeu={''} onChange={''}/>
+              </fieldset>
+              <fieldset className='form-group'>
+                <input type="text" placeholder='' valeu={''} onChange={''}/>
+              </fieldset>
+              <fieldset className='form-group'>
+                <input type="text" placeholder='' valeu={''} onChange={''}/>
+              </fieldset>
+            </fieldset>
+          </form>
+        </>
+      )}
+      <hr/>
       {isLoading && <Loading/>}
       {error &&<ErrorMessage/>}
-      {!isLoading && response && <TableUser data={partData}/>}
-      <Pagination currentPage={currentPage} limit={limit} total={total} handleCurrentPage={handleCurrentPage}/>
+      {!isLoading && response && (
+        <TableUser data={partData}/>
+      )}
+      <Pagination
+        handleCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+        limit={limit}
+        total={total}
+      />
     </div>
   );
 }
