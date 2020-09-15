@@ -16,11 +16,11 @@ export const compare = (a, b) => (field, order) => {
       case true:
         if (first > second) return -1;
         if (first < second) return  1;
-        return 0;
+        break;
       case false:
         if (first < second) return -1;
         if (first > second) return  1;
-        return 0;
+        break;
       default:
         return 0;
     }

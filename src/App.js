@@ -8,17 +8,22 @@ import Pagination from './components/pagination';
 import RenderUser from './components/renderUser'
 import {cutResponse} from './utils';
 import AddUserForm from './components/addUserForm';
+import FilterUser from './components/filterUser';
 
 const App = () => {
-  const [{response, isLoading, error}, doFetch] = useFetch();
-  const [isSmal, setIsSmal] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [partData, setPartData] = useState();
-  const [isOpendAddForm, setIsOpendAddForm] = useState(false);
-  const [renderUser, setRenderUser] = useState(null)
   const limit = 10;
+  const [isSmal, setIsSmal] = useState(true);
   const total = isSmal ? 32 : 1000;
 
+  const [{response, isLoading, error}, doFetch] = useFetch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterData, setFilterData] = useState([]);
+
+  const [partData, setPartData] = useState();
+  const [isOpendAddForm, setIsOpendAddForm] = useState(false);
+  const [renderUser, setRenderUser] = useState(null);
+  const [usersFilter, setUsersFilter] = useState('');
+  
   const addUserInfo = (data) => {
     setPartData([ data, ...partData]);
     setIsOpendAddForm(false)
@@ -27,12 +32,21 @@ const App = () => {
   useEffect(() => {
     doFetch(isSmal)
   }, [doFetch, isSmal]);
-
+  
   useEffect(() => {
     if(!response) return;
-    setPartData(cutResponse({response, currentPage, limit}))
-  }, [response, currentPage])
+    if(!usersFilter) {
+      setFilterData(response)
+    } else {
+      setFilterData(
+        response.filter((el) => Object.values(el).join(' ').includes(usersFilter))
+      );
+    }
+  }, [response, usersFilter])
 
+  useEffect(() => {
+    setPartData(cutResponse({response: filterData, currentPage, limit}))
+  }, [filterData, currentPage])
   return (
     <div className='container page'>
       <div className="container">
@@ -62,6 +76,11 @@ const App = () => {
               <AddUserForm addUserInfo={addUserInfo}/>
             </>
           )}
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <FilterUser filterUser={setUsersFilter}/>
           </div>
         </div>
       </div>

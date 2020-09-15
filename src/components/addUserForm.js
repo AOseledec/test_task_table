@@ -10,7 +10,7 @@ const [phone, setPhone] = useState('');
     e.preventDefault();
     addUserInfo(
       {
-        id: Date.now(),
+        id: Date.now() - 1600177000000,
         firstName,
         lastName,
         email,
