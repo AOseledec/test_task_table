@@ -5,6 +5,7 @@ import Loading from './components/loading';
 import ErrorMessage from './components/errorMessage';
 import TableUser from './components/tableUser';
 import Pagination from './components/pagination';
+import RenderUser from './components/renderUser'
 import {cutResponse} from './utils';
 
 const App = () => {
@@ -12,11 +13,10 @@ const App = () => {
   const [isSmal, setIsSmal] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [partData, setPartData] = useState();
-  const [isOpendAddForm, setIsOpendAddForm] = useState(false)
+  const [isOpendAddForm, setIsOpendAddForm] = useState(false);
+  const [renderUser, setRenderUser] = useState(null)
   const limit = 10;
   const total = isSmal ? 32 : 1000;
-
-  // const handleCurrentPage = page => setCurrentPage(page);
 
   useEffect(() => {
     doFetch(isSmal)
@@ -70,11 +70,15 @@ const App = () => {
           </form>
         </>
       )}
+
       <hr/>
       {isLoading && <Loading/>}
       {error &&<ErrorMessage/>}
       {!isLoading && response && (
-        <TableUser data={partData}/>
+        <TableUser data={partData} renderData={setRenderUser}/>
+      )}
+      {renderUser && (
+        <RenderUser data={renderUser}/>
       )}
       <Pagination
         handleCurrentPage={setCurrentPage}
