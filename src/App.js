@@ -7,6 +7,7 @@ import TableUser from './components/tableUser';
 import Pagination from './components/pagination';
 import RenderUser from './components/renderUser'
 import {cutResponse} from './utils';
+import AddUserForm from './components/addUserForm';
 
 const App = () => {
   const [{response, isLoading, error}, doFetch] = useFetch();
@@ -17,6 +18,11 @@ const App = () => {
   const [renderUser, setRenderUser] = useState(null)
   const limit = 10;
   const total = isSmal ? 32 : 1000;
+
+  const addUserInfo = (data) => {
+    setPartData([ data, ...partData]);
+    setIsOpendAddForm(false)
+  }
 
   useEffect(() => {
     doFetch(isSmal)
@@ -48,28 +54,18 @@ const App = () => {
             >Add row</button>
           </div>
         </div>
+        <div className="row">
+          <div>
+          {isOpendAddForm && (
+            <>
+              <hr/>
+              <AddUserForm addUserInfo={addUserInfo}/>
+            </>
+          )}
+          </div>
+        </div>
       </div>
-      {isOpendAddForm && (
-        <>
-          <hr/>
-          <form className='form'>
-            <fieldset>
-              <fieldset className='form-group'>
-                <input type="text" placeholder='' valeu={''} onChange={''}/>
-              </fieldset>
-              <fieldset className='form-group'>
-                <input type="text" placeholder='' valeu={''} onChange={''}/>
-              </fieldset>
-              <fieldset className='form-group'>
-                <input type="text" placeholder='' valeu={''} onChange={''}/>
-              </fieldset>
-              <fieldset className='form-group'>
-                <input type="text" placeholder='' valeu={''} onChange={''}/>
-              </fieldset>
-            </fieldset>
-          </form>
-        </>
-      )}
+      
 
       <hr/>
       {isLoading && <Loading/>}
